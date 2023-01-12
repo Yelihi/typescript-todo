@@ -9,12 +9,14 @@ const Login = () => {
       </LeftTopBrand>
       <LoginSection>
         <LoginForm action="submit">
-          <h1>Login</h1>
+          <h1>Welcome!</h1>
           <span>하루의 스케줄을 관리해보세요!</span>
           <input type="email" placeholder="Email" />
           <input type="password" placeholder="Password" />
-          <button>Sign in</button>
-          <button>Create account</button>
+          <Button color="black">Sign in</Button>
+          <Button color="">Create account</Button>
+          <div></div>
+          <div></div>
         </LoginForm>
       </LoginSection>
     </LoginBox>
@@ -26,7 +28,7 @@ export default Login;
 const LoginBox = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: auto;
   height: auto;
@@ -35,6 +37,7 @@ const LoginBox = styled.div`
 
 const LeftTopBrand = styled.div`
   width: 100%;
+  margin-bottom: 70px;
 
   > span {
     text-align: start;
@@ -47,7 +50,6 @@ const LoginSection = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 120px 60px;
 `;
 
 const LoginForm = styled.form`
@@ -56,7 +58,7 @@ const LoginForm = styled.form`
   justify-content: center;
   align-items: flex-start;
   width: 100%;
-  height: auto;
+  height: fit-content;
 
   > h1 {
     display: inline-block;
@@ -84,18 +86,18 @@ const LoginForm = styled.form`
     }
   }
 
-  > button {
+  > div {
     width: 100%;
-    height: 40px;
-    margin-bottom: 13px;
-    border-radius: 20px;
-    background-color: ${({ theme }) => theme.colors.black};
-    color: ${({ theme }) => theme.colors.white};
-
-    :last-child {
-      background-color: ${({ theme }) => theme.colors.white};
-      color: ${({ theme }) => theme.colors.black};
-      border: 1px solid black;
-    }
+    height: 30px;
   }
+`;
+
+const Button = styled.button<{ color: string }>`
+  width: 100%;
+  height: 40px;
+  margin-bottom: 13px;
+  border-radius: 20px;
+  background-color: ${({ theme, color }) => (color ? color : theme.colors.white)};
+  color: ${({ theme, color }) => (color ? theme.colors.white : theme.colors.black)};
+  border: ${({ theme, color }) => (!color ? `1px solid ${theme.colors.black}` : "none")};
 `;

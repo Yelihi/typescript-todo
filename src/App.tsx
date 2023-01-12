@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 
 function App() {
+  const [gotoAccount, setGotoAccount] = useState<boolean>(true);
+
   return (
     <Container>
       <Section>
-        <Login />
+        {gotoAccount ? <Signup /> : <Login />}
         <Image>
           <img src="/images/todo2.jpg" />
         </Image>
@@ -31,7 +33,7 @@ const Container = styled.div`
 const Section = styled.section`
   display: flex;
   width: fit-content;
-  height: auto;
+  height: 630px;
   background-color: white;
 `;
 
@@ -44,5 +46,6 @@ const Image = styled.div`
     width: 500px;
     height: 100%;
     object-fit: cover;
+    border-radius: 15px;
   }
 `;
