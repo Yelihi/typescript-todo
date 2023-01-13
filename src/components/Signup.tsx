@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-const Signup = () => {
+export interface SIprops {
+  toggleGotoAccount: () => void;
+}
+
+const Signup = (props: SIprops) => {
+  // const submitAccount = () => {}
+  const { toggleGotoAccount } = props;
+
   return (
     <SignupBox>
       <LeftTopBrand>
@@ -18,8 +25,12 @@ const Signup = () => {
           <input type="text" placeholder="Name" />
           <input type="email" placeholder="Email" />
           <input type="password" placeholder="Password" />
-          <Button color="black">Create account</Button>
-          <Button color="">back</Button>
+          <Button color="black" onClick={toggleGotoAccount}>
+            Create account
+          </Button>
+          <Button color="" onClick={toggleGotoAccount}>
+            back
+          </Button>
           <div></div>
           <div></div>
         </SignupForm>

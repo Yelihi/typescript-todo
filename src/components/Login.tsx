@@ -1,7 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
-const Login = () => {
+import type { SIprops } from "./Signup";
+import useInput from "../hooks/useInput";
+
+const Login = (props: SIprops) => {
+  const { toggleGotoAccount } = props;
+  const [email, setEmail, onChangeEmail] = useInput("");
+  const [password, setPassword, onChangePassword] = useInput("");
+
+  const emailRegExp = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,3}$/;
+  const passwordRegExp = /^.{8,}$/;
+
+  const isEmailValid = emailRegExp.test(email);
+  const isPasswordValid = passwordRegExp.test(password);
+
   return (
     <LoginBox>
       <LeftTopBrand>
@@ -11,12 +24,16 @@ const Login = () => {
         <LoginForm action="submit">
           <h1>Welcome!</h1>
           <span>하루의 스케줄을 관리해보세요!</span>
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <Button color="black">Sign in</Button>
-          <Button color="">Create account</Button>
-          <div></div>
-          <div></div>
+          <input type="email" value={email} onChange={onChangeEmail} placeholder="Email" />
+          <input type="password" value={password} onChange={onChangePassword} placeholder="Password" />
+          <Button color="black" disabled={!(isEmailValid && isPasswordValid)}>
+            Sign in
+          </Button>
+          <Button color="" onClick={toggleGotoAccount} disabled={false}>
+            Create account
+          </Button>
+          {email && !isEmailValid && <div>이메일이 올바르지 않습니다.</div>}
+          {password && !isPasswordValid && <div>비밀번호가 올바르지 않습니다</div>}
         </LoginForm>
       </LoginSection>
     </LoginBox>
@@ -89,10 +106,14 @@ const LoginForm = styled.form`
   > div {
     width: 100%;
     height: 30px;
+    font-family: ${({ theme }) => theme.font.Kfont};
+    font-weight: ${({ theme }) => theme.fontWeight.Light};
+    font-size: 12px;
+    color: red;
   }
 `;
 
-const Button = styled.button<{ color: string }>`
+const Button = styled.button<{ color: string; disabled: boolean }>`
   width: 100%;
   height: 40px;
   margin-bottom: 13px;
@@ -100,4 +121,6 @@ const Button = styled.button<{ color: string }>`
   background-color: ${({ theme, color }) => (color ? color : theme.colors.white)};
   color: ${({ theme, color }) => (color ? theme.colors.white : theme.colors.black)};
   border: ${({ theme, color }) => (!color ? `1px solid ${theme.colors.black}` : "none")};
+  opacity: ${({ disabled }) => (disabled ? "0.4" : "1")};
+  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
 `;

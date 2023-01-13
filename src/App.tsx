@@ -5,18 +5,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 
 function App() {
-  const [gotoAccount, setGotoAccount] = useState<boolean>(true);
-
-  return (
-    <Container>
-      <Section>
-        {gotoAccount ? <Signup /> : <Login />}
-        <Image>
-          <img src="/images/todo2.jpg" />
-        </Image>
-      </Section>
-    </Container>
-  );
+  return <div>todo 들어갈곳</div>;
 }
 
 export default App;
