@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
+import axios, { AxiosHeaders, AxiosResponse } from "axios";
+
+import useInput from "../hooks/useInput";
+
+import { client } from "../config/config";
 
 export interface SIprops {
   toggleGotoAccount: () => void;
@@ -8,6 +13,63 @@ export interface SIprops {
 const Signup = (props: SIprops) => {
   // const submitAccount = () => {}
   const { toggleGotoAccount } = props;
+  const [isCollect, setIsCollect] = useState<boolean>(false);
+  const [email, setEmail, onChangeEmail] = useInput("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordCheck, setPasswordCheck] = useState<string>("");
+
+  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const onChangePasswordCheck = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPasswordCheck(e.target.value);
+      setIsCollect(e.target.value === password);
+    },
+    [password]
+  );
+
+  const onSubmit = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      if (password !== passwordCheck) {
+        setIsCollect(false);
+      }
+      submitAccount();
+      toggleGotoAccount();
+    },
+    [email, password, passwordCheck]
+  );
+
+  interface IResult {
+    config: any;
+    data: { message: string; token: string };
+    headers: AxiosHeaders;
+    request: XMLHttpRequest;
+    status: number;
+    statusText: string;
+  }
+
+  const submitAccount = async () => {
+    try {
+      const result = await client.post("/users/create", {
+        email: email,
+        password: password,
+      });
+      alert(result.data.message);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const emailRegExp = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,3}$/;
+  const passwordRegExp = /^.{8,}$/;
+
+  const isEmailValid = emailRegExp.test(email);
+  const isPasswordValid = passwordRegExp.test(password);
+
+  console.log(isEmailValid, isPasswordValid, isCollect);
 
   return (
     <SignupBox>
@@ -15,20 +77,20 @@ const Signup = (props: SIprops) => {
         <span>@Yelihi</span>
       </LeftTopBrand>
       <SignupSection>
-        <SignupForm action="submit">
+        <SignupForm>
           <h1>Create an account</h1>
           <span>
             이메일 양식에 적합하게 작성해주시고,
             <br />
             비밀번호는 8자리 이상 해주세요
           </span>
-          <input type="text" placeholder="Name" />
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <Button color="black" onClick={toggleGotoAccount}>
+          <input type="email" value={email} onChange={onChangeEmail} placeholder="Email" />
+          <input type="password" value={password} onChange={onChangePassword} placeholder="Password" />
+          <input type="password" value={passwordCheck} onChange={onChangePasswordCheck} placeholder="Password Check" />
+          <Button color="black" disabled={!(isEmailValid && isPasswordValid && isCollect)} onClick={onSubmit}>
             Create account
           </Button>
-          <Button color="" onClick={toggleGotoAccount}>
+          <Button color="" disabled={false} onClick={toggleGotoAccount}>
             back
           </Button>
           <div></div>
@@ -108,7 +170,7 @@ const SignupForm = styled.form`
   }
 `;
 
-const Button = styled.button<{ color: string }>`
+const Button = styled.button<{ color: string; disabled: boolean }>`
   width: 100%;
   height: 40px;
   margin-bottom: 13px;
@@ -116,4 +178,6 @@ const Button = styled.button<{ color: string }>`
   background-color: ${({ theme, color }) => (color ? color : theme.colors.white)};
   color: ${({ theme, color }) => (color ? theme.colors.white : theme.colors.black)};
   border: ${({ theme, color }) => (!color ? `1px solid ${theme.colors.black}` : "none")};
+  opacity: ${({ disabled }) => (disabled ? "0.4" : "1")};
+  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
 `;
