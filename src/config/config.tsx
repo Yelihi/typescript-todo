@@ -6,7 +6,6 @@ const axiosConfig: AxiosRequestConfig = {
 
 export const client = axios.create(axiosConfig);
 
-// login
 export interface IResult {
   config: any;
   data: { message: string; token: string };
@@ -16,6 +15,7 @@ export interface IResult {
   statusText: string;
 }
 
+// Login
 export interface LoginProps {
   email: string;
   password: string;
@@ -29,8 +29,11 @@ export const tryToLogin = async (props: LoginProps) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(error);
+      alert(error.response?.data.details);
+      return error;
     } else {
       console.log("unexpected error", error);
+      return error;
     }
   }
 };

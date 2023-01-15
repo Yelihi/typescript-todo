@@ -20,10 +20,12 @@ const Login = (props: SIprops) => {
   const isEmailValid = emailRegExp.test(email);
   const isPasswordValid = passwordRegExp.test(password);
 
-  const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    tryToLogin({ email: email, password: password });
-    navigate("/");
+    await tryToLogin({ email: email, password: password });
+    if (localStorage.getItem("Token")) {
+      navigate("/");
+    }
   };
 
   return (
@@ -36,15 +38,15 @@ const Login = (props: SIprops) => {
           <h1>Welcome!</h1>
           <span>하루의 스케줄을 관리해보세요!</span>
           <input type="email" value={email} onChange={onChangeEmail} placeholder="Email" />
+          <div>{email && !isEmailValid && `이메일이 올바르지 않습니다`}</div>
           <input type="password" value={password} onChange={onChangePassword} placeholder="Password" />
+          <div>{password && !isPasswordValid && `비밀번호가 올바르지 않습니다`}</div>
           <Button color="black" onClick={onSubmit} disabled={!(isEmailValid && isPasswordValid)}>
             Sign in
           </Button>
           <Button color="" onClick={toggleGotoAccount} disabled={false}>
             Create account
           </Button>
-          {email && !isEmailValid && <div>이메일이 올바르지 않습니다.</div>}
-          {password && !isPasswordValid && <div>비밀번호가 올바르지 않습니다</div>}
         </LoginForm>
       </LoginSection>
     </LoginBox>
@@ -107,7 +109,7 @@ const LoginForm = styled.form`
     width: 300px;
     height: 30px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 
     :focus {
       border-bottom: 1px solid rgba(0, 0, 0, 0.4);
@@ -116,7 +118,8 @@ const LoginForm = styled.form`
 
   > div {
     width: 100%;
-    height: 30px;
+    height: 20px;
+    margin-bottom: 5px;
     font-family: ${({ theme }) => theme.font.Kfont};
     font-weight: ${({ theme }) => theme.fontWeight.Light};
     font-size: 12px;

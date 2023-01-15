@@ -31,12 +31,12 @@ const Signup = (props: SIprops) => {
   );
 
   const onSubmit = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       if (password !== passwordCheck) {
         setIsCollect(false);
       }
-      addToAccount({ email: email, password: password });
+      await addToAccount({ email: email, password: password });
       toggleGotoAccount();
     },
     [email, password, passwordCheck]
@@ -64,8 +64,11 @@ const Signup = (props: SIprops) => {
             비밀번호는 8자리 이상 해주세요
           </span>
           <input type="email" value={email} onChange={onChangeEmail} placeholder="Email" />
+          <div>{email && !isEmailValid && `이메일이 올바르지 않습니다`}</div>
           <input type="password" value={password} onChange={onChangePassword} placeholder="Password" />
+          <div>{password && !isPasswordValid && `비밀번호가 올바르지 않습니다`}</div>
           <input type="password" value={passwordCheck} onChange={onChangePasswordCheck} placeholder="Password Check" />
+          <div>{passwordCheck && !isCollect && `비밀번호가 일치하지 않습니다`}</div>
           <Button color="black" disabled={!(isEmailValid && isPasswordValid && isCollect)} onClick={onSubmit}>
             Create account
           </Button>
@@ -136,7 +139,7 @@ const SignupForm = styled.form`
     width: 300px;
     height: 30px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 
     :focus {
       border-bottom: 1px solid rgba(0, 0, 0, 0.4);
@@ -145,7 +148,12 @@ const SignupForm = styled.form`
 
   > div {
     width: 100%;
-    height: 30px;
+    height: 20px;
+    margin-bottom: 5px;
+    font-family: ${({ theme }) => theme.font.Kfont};
+    font-weight: ${({ theme }) => theme.fontWeight.Light};
+    font-size: 12px;
+    color: red;
   }
 `;
 
