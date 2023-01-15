@@ -53,7 +53,7 @@ const Signup = (props: SIprops) => {
 
   const submitAccount = async () => {
     try {
-      const result = await client.post("/users/create", {
+      const result: IResult = await client.post("/users/create", {
         email: email,
         password: password,
       });

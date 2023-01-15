@@ -1,10 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { tryToLogin } from "../config/config";
+
 import type { SIprops } from "./Signup";
+
 import useInput from "../hooks/useInput";
 
 const Login = (props: SIprops) => {
+  const navigate = useNavigate();
   const { toggleGotoAccount } = props;
   const [email, setEmail, onChangeEmail] = useInput("");
   const [password, setPassword, onChangePassword] = useInput("");
@@ -15,18 +20,24 @@ const Login = (props: SIprops) => {
   const isEmailValid = emailRegExp.test(email);
   const isPasswordValid = passwordRegExp.test(password);
 
+  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    tryToLogin({ email: email, password: password });
+    navigate("/");
+  };
+
   return (
     <LoginBox>
       <LeftTopBrand>
         <span>@Yelihi</span>
       </LeftTopBrand>
       <LoginSection>
-        <LoginForm action="submit">
+        <LoginForm>
           <h1>Welcome!</h1>
           <span>하루의 스케줄을 관리해보세요!</span>
           <input type="email" value={email} onChange={onChangeEmail} placeholder="Email" />
           <input type="password" value={password} onChange={onChangePassword} placeholder="Password" />
-          <Button color="black" disabled={!(isEmailValid && isPasswordValid)}>
+          <Button color="black" onClick={onSubmit} disabled={!(isEmailValid && isPasswordValid)}>
             Sign in
           </Button>
           <Button color="" onClick={toggleGotoAccount} disabled={false}>
