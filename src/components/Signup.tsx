@@ -4,7 +4,7 @@ import axios, { AxiosHeaders, AxiosResponse } from "axios";
 
 import useInput from "../hooks/useInput";
 
-import { client } from "../config/config";
+import { client, addToAccount } from "../config/config";
 
 export interface SIprops {
   toggleGotoAccount: () => void;
@@ -36,32 +36,11 @@ const Signup = (props: SIprops) => {
       if (password !== passwordCheck) {
         setIsCollect(false);
       }
-      submitAccount();
+      addToAccount({ email: email, password: password });
       toggleGotoAccount();
     },
     [email, password, passwordCheck]
   );
-
-  interface IResult {
-    config: any;
-    data: { message: string; token: string };
-    headers: AxiosHeaders;
-    request: XMLHttpRequest;
-    status: number;
-    statusText: string;
-  }
-
-  const submitAccount = async () => {
-    try {
-      const result: IResult = await client.post("/users/create", {
-        email: email,
-        password: password,
-      });
-      alert(result.data.message);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const emailRegExp = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,3}$/;
   const passwordRegExp = /^.{8,}$/;

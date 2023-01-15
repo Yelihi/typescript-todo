@@ -20,7 +20,7 @@ const Login = (props: SIprops) => {
   const isEmailValid = emailRegExp.test(email);
   const isPasswordValid = passwordRegExp.test(password);
 
-  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     tryToLogin({ email: email, password: password });
     navigate("/");

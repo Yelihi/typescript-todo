@@ -42,6 +42,7 @@ const Section = styled.section`
 `;
 
 const Image = styled.div`
+  display: block;
   width: auto;
   height: 628px;
   padding: 20px;
@@ -51,5 +52,9 @@ const Image = styled.div`
     height: 100%;
     object-fit: cover;
     border-radius: 15px;
+  }
+
+  @media screen and (max-width: 900px) {
+    display: none;
   }
 `;

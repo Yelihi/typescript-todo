@@ -6,6 +6,7 @@ const axiosConfig: AxiosRequestConfig = {
 
 export const client = axios.create(axiosConfig);
 
+// login
 export interface IResult {
   config: any;
   data: { message: string; token: string };
@@ -30,6 +31,26 @@ export const tryToLogin = async (props: LoginProps) => {
       console.error(error);
     } else {
       console.log("unexpected error", error);
+    }
+  }
+};
+
+// signup
+
+export interface SignUpProps {
+  email: string;
+  password: string;
+}
+
+export const addToAccount = async (props: SignUpProps) => {
+  try {
+    const result: IResult = await client.post("/users/create", props);
+    alert(result.data.message);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(error);
+    } else {
+      console.log("unexprected error", error);
     }
   }
 };
