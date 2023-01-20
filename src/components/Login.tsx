@@ -24,7 +24,7 @@ const Login = (props: SIprops) => {
     e.preventDefault();
     await tryToLogin({ email: email, password: password });
     if (localStorage.getItem("Token")) {
-      navigate("/");
+      navigate("/todo");
     }
   };
 

@@ -1,17 +1,15 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
-import axios, { AxiosHeaders, AxiosResponse } from "axios";
 
 import useInput from "../hooks/useInput";
 
-import { client, addToAccount } from "../config/config";
+import { addToAccount } from "../config/config";
 
 export interface SIprops {
   toggleGotoAccount: () => void;
 }
 
 const Signup = (props: SIprops) => {
-  // const submitAccount = () => {}
   const { toggleGotoAccount } = props;
   const [isCollect, setIsCollect] = useState<boolean>(false);
   const [email, setEmail, onChangeEmail] = useInput("");
@@ -36,8 +34,10 @@ const Signup = (props: SIprops) => {
       if (password !== passwordCheck) {
         setIsCollect(false);
       }
-      await addToAccount({ email: email, password: password });
-      toggleGotoAccount();
+      let result = await addToAccount({ email: email, password: password });
+      if (!result) {
+        toggleGotoAccount();
+      }
     },
     [email, password, passwordCheck]
   );

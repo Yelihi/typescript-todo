@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosHeaders } from "axios";
+import axios, { AxiosRequestConfig, AxiosHeaders, AxiosError } from "axios";
 
 const axiosConfig: AxiosRequestConfig = {
   baseURL: "http://localhost:8080",
@@ -52,8 +52,11 @@ export const addToAccount = async (props: SignUpProps) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(error);
+      alert(error.response?.data.details);
+      return error;
     } else {
       console.log("unexprected error", error);
+      return error;
     }
   }
 };
